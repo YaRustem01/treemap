@@ -1,4 +1,5 @@
 from r import R
+from math import sqrt
 
 def treemap(box, inp):
     items = []
@@ -11,9 +12,11 @@ def treemap(box, inp):
         while True:
             if cur is None:
                 if box.w > box.h:
-                    cur = R(box.x, box.y, box.w / 2, box.h, 1)
+                    w_2 = sqrt(v / A * S)
+                    cur = R(box.x, box.y, w_2, box.h, 1)
                 else:
-                    cur = R(box.x, box.y, box.w, box.h / 2, -1)
+                    h_2 = sqrt(v / A * S)
+                    cur = R(box.x, box.y, box.w, h_2, -1)
 
             if cur.v > 0:
                 w = cur.w
@@ -25,11 +28,8 @@ def treemap(box, inp):
             r = R(0.0, 0.0, w, h, v)
             a = sum([i.area for i in cur_items])
             q = sum([i.v for i in cur_items])
-            if a + r.area > cur.area:
+            if cur_items and a + r.area > cur.area:
                 if cur.v > 0:
-                    if not cur_items:
-                        cur = R(box.x, box.y, box.w, box.h, 1)
-                        continue
                     w = q / A * S / cur.h
                     y = cur.y
                     for i in cur_items:
@@ -46,11 +46,8 @@ def treemap(box, inp):
                         h = H - y
                     else:
                         w = W - x
-                        h = H
+                        h = H - y
                 else:
-                    if not cur_items:
-                        cur = R(box.x, box.y, box.w, box.h, -1)
-                        continue
                     h = q / A * S / cur.w
                     x = cur.x
                     for i in cur_items:
@@ -66,8 +63,8 @@ def treemap(box, inp):
                         x = cur.x
                         w = W - x
                     else:
-                        h = H - h
-                        w = W
+                        h = H - y
+                        w = W - x
 
                 cur_items = []
                 box = R(x, y, w, h)
@@ -79,7 +76,7 @@ def treemap(box, inp):
 
     cur = R(box.x, box.y, W - box.x, H - box.y)
     q = sum([i.v for i in cur_items])
-    if box.w < box.h:
+    if box.w > box.h:
         w = q / A * S / cur.h
         for i in cur_items:
             h = i.v / A * S / w
@@ -94,3 +91,4 @@ def treemap(box, inp):
             cur.x += w
             items.append(r)
     return items
+
