@@ -20,4 +20,3 @@ class R:
     @property
     def area(self):
         return self.w * self.h
-

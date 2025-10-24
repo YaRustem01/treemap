@@ -2,6 +2,7 @@ import numpy as np
 from matplotlib import pyplot as plt
 from scipy.spatial import Voronoi, voronoi_plot_2d
 
+
 def draw(box, items):
     for r in items:
         print(r)
